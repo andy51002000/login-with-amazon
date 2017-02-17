@@ -1,7 +1,7 @@
 var https = require("https");
  /**
   * @param string $accessToken Required
-  * @return object {data} or {key: data} depending on options provided
+  * @return function reject/resolve
   */
 exports.getProfilePromise = function (accessToken) {
   return new Promise(function (resolve, reject) {
@@ -15,6 +15,10 @@ exports.getProfilePromise = function (accessToken) {
   });
 };
 
+ /**
+  * @param string $accessToken Required
+  * @return object {data} or {key: data} depending on options provided
+  */
 exports.getProfileCallback = function (accessToken, callback) {
   var url = "https://api.amazon.com/user/profile?access_token="+
                 encodeURIComponent(accessToken);
