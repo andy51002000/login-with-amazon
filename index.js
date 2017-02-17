@@ -1,19 +1,4 @@
 var https = require("https");
- /**
-  * @param string $accessToken Required
-  * @return function reject/resolve
-  */
-exports.getProfilePromise = function (accessToken) {
-  return new Promise(function (resolve, reject) {
-    exports.getProfileCallback(accessToken, function (err, data){
-      if (err) {
-        return reject(err);
-      } else {
-        return resolve(data);
-      }
-    });
-  });
-};
 
  /**
   * @param string $accessToken Required
