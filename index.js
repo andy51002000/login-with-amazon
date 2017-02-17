@@ -4,7 +4,7 @@ var https = require("https");
   * @param string $accessToken Required
   * @return object {data} or {key: data} depending on options provided
   */
-exports.getProfileCallback = function (accessToken, callback) {
+exports.getProfile = function (accessToken, callback) {
   var url = "https://api.amazon.com/user/profile?access_token="+
                 encodeURIComponent(accessToken);
   var req = https.get(url, function (res) {
