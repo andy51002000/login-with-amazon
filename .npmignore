@@ -1,0 +1,10 @@
+.DS_Store
+.eslintrc.json
+.git
+.hg
+.lock-wscript
+.wafpickle-N
+*.swp
+._*
+**/node_modules/*
+npm-debug.log
