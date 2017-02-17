@@ -16,7 +16,7 @@ exports.getAmazonProfilePromise = (accessToken) => {
           console.error("Error getting Amazon Profile - "+JSON.stringify(body));
           return reject(new Error(body));
         } else {
-          resolve({"Amazon":{data}});
+          resolve(data);
         }
       });
     }).on("error", (err) => {

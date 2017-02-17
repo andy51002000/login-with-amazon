@@ -1,1 +1,76 @@
-../../.eslintrc.json
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": "eslint:recommended",
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    },
+    "sourceType": "module"
+  },
+  "plugins": [],
+  "rules": {
+    "array-bracket-spacing": [
+      2,
+      "always",
+      {"singleValue": false}
+    ],
+    "brace-style": [
+      2,
+      "1tbs"
+    ],
+    "indent": [
+      2,
+      2,
+      {"SwitchCase": 1}
+    ],
+    "linebreak-style": [
+      2,
+      "unix"
+    ],
+    "max-len": [
+      2
+    ],
+    "no-alert": [
+      2
+    ],
+    "no-console": [
+      0
+    ],
+    "no-debugger": [
+      2
+    ],
+    "no-trailing-spaces": [
+      2
+    ],
+    "no-undef" : [
+      2
+    ],
+    "no-undefined" : [
+      2
+    ],
+    "no-unused-vars": [
+      0, {
+          "vars": "all",
+          "args": "after-used"
+      }
+    ],
+    "quotes": [
+      2,
+      "double"
+    ],
+    "semi": [
+      2,
+      "always"
+    ],
+    "yoda": [
+      2,
+      "always"
+    ]
+  }
+}

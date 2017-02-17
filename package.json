@@ -1,5 +1,5 @@
 {
-  "name": "login_with_amazon",
+  "name": "login-with-amazon",
   "version": "0.0.1",
   "description": "Login with Amazon helper library",
   "main": "index.js",
