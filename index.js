@@ -1,25 +1,35 @@
 var https = require("https");
-
-exports.getAmazonProfilePromise = (accessToken) => {
+ /**
+  * @param string $accessToken Required
+  * @param string $key Optional Lets you namespace the return value
+  * @return object {data} or {key: data} depending on options provided
+  */
+exports.getProfilePromise = function (accessToken, key) {
   return new Promise(function (resolve, reject) {
-    let url = "https://api.amazon.com/user/profile?access_token="+
+    var url = "https://api.amazon.com/user/profile?access_token="+
                   encodeURIComponent(accessToken);
-    var req = https.get(url, (res) => {
-      let body = "";
+    var req = https.get(url, function (res) {
+      var body = "";
       res.setEncoding("utf8");
-      res.on("data", (chunk) => {
+      res.on("data", function (chunk) {
         body += chunk;
       });
-      res.on("end", () => {
-        let data = JSON.parse(body);
+      res.on("end", function () {
+        var data = JSON.parse(body);
         if(data.error_description) {
           console.error("Error getting Amazon Profile - "+JSON.stringify(body));
           return reject(new Error(body));
         } else {
-          resolve(data);
+          var result = {};
+          if (key) {
+            result[key] = data;
+          } else {
+            result = data;
+          }
+          resolve(result);
         }
       });
-    }).on("error", (err) => {
+    }).on("error", function (err) {
       console.error("Error getting Amazon Profile - "+JSON.stringify(err));
       return reject(err);
     });
