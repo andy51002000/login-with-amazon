@@ -1,6 +1,6 @@
 {
   "name": "login-with-amazon",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Login with Amazon helper library",
   "main": "index.js",
   "keywords": "login amazon authentication profile",
