@@ -46,7 +46,7 @@ lwa.getProfile = function getProfile(accessToken) {
     // last ditch error catch
     if (response.body.error_description || response.body.error) {
       throw new Error(`Yet be supported encountered - ${response.body.error} - `
-                       + `${response.body.description}`);
+                       + `${response.body.error_description}`);
     }
     return response.body;
   });
