@@ -5,7 +5,7 @@
   "main": "index.js",
   "keywords": "login amazon authentication profile",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest tests/*.js"
   },
   "author": "Steve Gula (github.com@stevegula.net)",
   "license": "MIT",
@@ -14,13 +14,17 @@
     "url": "git://github.com/stevegula/login-with-amazon.git"
   },
   "dependencies": {
-    "https": "^1.0.0"
+    "bhttp": "^1.2.4"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
+    "babel-jest": "^19.0.0",
+    "babel-preset-es2015": "^6.22.0",
     "eslint": "^3.16.1",
     "eslint-config-airbnb-base": "^11.1.0",
     "eslint-plugin-import": "^2.2.0",
-    "eslint_d": "^4.2.1"
+    "eslint_d": "^4.2.1",
+    "jest": "^19.0.2",
+    "regenerator-runtime": "^0.10.3"
   }
 }
