@@ -43,5 +43,6 @@ lwa.getProfile = function getProfile(accessToken) {
           throw new Error(`Yet be supported encountered - ${error}`);
       }
     }
+    return response.body;
   });
 };
