@@ -31,7 +31,7 @@ lwa.error.InvalidTokenError = class InvalidTokenError extends Error {
   */
 lwa.getProfile = function getProfile(accessToken) {
   const url = 'https://api.amazon.com/user/profile?access_token=' +
-                encodeURIComponent(accessToken);
+                `${encodeURIComponent(accessToken)}`;
   return bhttp.get(url).then((response) => {
     console.log(response);
     if (response.headers['x-amzn-errortype']) {
@@ -42,6 +42,11 @@ lwa.getProfile = function getProfile(accessToken) {
         default:
           throw new Error(`Yet be supported encountered - ${error}`);
       }
+    }
+    // last ditch error catch
+    if (response.body.error_description || response.body.error) {
+      throw new Error(`Yet be supported encountered - ${response.body.error} - `
+                       + `${response.body.description}`);
     }
     return response.body;
   });
