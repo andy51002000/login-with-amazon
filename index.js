@@ -40,12 +40,12 @@ lwa.getProfile = function getProfile(accessToken) {
         case 'InvalidTokenException':
           throw new lwa.error.InvalidTokenError();
         default:
-          throw new Error(`Yet be supported encountered - ${error}`);
+          throw new Error(`Yet be supported error encountered - ${error}`);
       }
     }
     // last ditch error catch
     if (response.body.error_description || response.body.error) {
-      throw new Error(`Yet be supported encountered - ${response.body.error} - `
+      throw new Error(`Yet be supported error encountered - ${response.body.error} - `
                        + `${response.body.error_description}`);
     }
     return response.body;
