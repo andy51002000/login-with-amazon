@@ -5,49 +5,82 @@ const bhttp = require('bhttp');
 const lwa = module.exports;
 lwa.error = {};
 
-lwa.error.InvalidResponseError = class InvalidResponseError extends Error {
+lwa.error.LoginWithAmazonError = class LoginWithAmazonError extends Error {
   /* name and message are probably the minimum,
-   * but you can add custom params too ofc */
-  constructor() {
+   * but you can  add custom params too ofc */
+  constructor(name, message) {
     super();
-    this.name = 'InvalidResponseError';
-    this.message = 'Invalid Response error. Login with Amazon did not return JSON.';
+    this.name = name;
+    this.message = message;
   }
 };
 
-lwa.error.InvalidTokenError = class InvalidTokenError extends Error {
-  /* name and message are probably the minimum,
-   * but you can add custom params too ofc */
-  constructor() {
-    super();
-    this.name = 'InvalidTokenError';
-    this.message = 'Invalid Token error. Token is likely expired or malformed.';
-  }
+lwa.getAccessTokens = function getAccessTokens(code, client_id, client_secret,
+  redirect_uri) {
+  const url = 'https://api.amazon.com/auth/o2/token';
+  const params = {
+    grant_type: 'authorization_code',
+    code,
+    client_id,
+    client_secret,
+    redirect_uri,
+  };
+  const options = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  };
+  return bhttp.post(url, params, options).then((response) => {
+    const body = response.body;
+    if (body.error) {
+      throw new lwa.error.LoginWithAmazonError(body.error,
+                                                body.error_description);
+    }
+    return body;
+  });
 };
 
  /**
   * @param string $accessToken Required
   * @return object {data} or {key: data} depending on options provided
   */
-lwa.getProfile = function getProfile(accessToken) {
+lwa.getProfile = function getProfile(access_token) {
   const url = 'https://api.amazon.com/user/profile?access_token=' +
-                `${encodeURIComponent(accessToken)}`;
+                `${encodeURIComponent(access_token)}`;
   return bhttp.get(url).then((response) => {
-    console.log(response);
-    if (response.headers['x-amzn-errortype']) {
-      const error = response.headers['x-amzn-errortype'].split(':')[0];
-      switch (error) {
-        case 'InvalidTokenException':
-          throw new lwa.error.InvalidTokenError();
-        default:
-          throw new Error(`Yet be supported error encountered - ${error}`);
-      }
+    const body = response.body;
+    if (body.error) {
+      throw new lwa.error.LoginWithAmazonError(body.error,
+                                                body.error_description);
     }
-    // last ditch error catch
-    if (response.body.error_description || response.body.error) {
-      throw new Error(`Yet be supported error encountered - ${response.body.error} - `
-                       + `${response.body.error_description}`);
+    return body;
+  });
+};
+
+ /**
+  * @param string $refreshToken Required
+  * @return string new token
+  */
+lwa.refreshAccessToken = function refreshAccessToken(refresh_token, client_id,
+  client_secret) {
+  const url = 'https://api.amazon.com/auth/o2/token';
+  const params = {
+    grant_type: 'refresh_token',
+    refresh_token,
+    client_id,
+    client_secret,
+  };
+  const options = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  };
+  return bhttp.post(url, params, options).then((response) => {
+    const body = response.body;
+    if (body.error) {
+      throw new lwa.error.LoginWithAmazonError(body.error,
+                                                body.error_description);
     }
-    return response.body;
+    return body;
   });
 };

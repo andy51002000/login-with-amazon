@@ -11,5 +11,16 @@ it('works with promises', () => {
   return lwa.getProfile('bad_token')
     .then((data) => {
     })
-    .catch(error => expect(error).toEqual(new lwa.error.InvalidTokenError()));
+    .catch((error) => {
+      expect(error).toEqual(new lwa.error.LoginWithAmazonError('invalid_token',
+        'invalid token'));
+    });
+});
+
+// Get InvalidTokenError w/ bad token
+it('refreshes token', () => {
+  return lwa.refreshAccessToken('good_token', 'clientId', 'clientSecret')
+    .then((data) => {
+      expect(data.access_token).toEqual('good token response');
+    });
 });
