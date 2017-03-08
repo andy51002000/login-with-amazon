@@ -4,10 +4,9 @@ const bhttp = require('bhttp');
 
 const lwa = module.exports;
 lwa.error = {};
+const OAUTH_URL = 'https://api.amazon.com/auth/o2/token';
 
 lwa.error.LoginWithAmazonError = class LoginWithAmazonError extends Error {
-  /* name and message are probably the minimum,
-   * but you can  add custom params too ofc */
   constructor(name, message) {
     super();
     this.name = name;
@@ -40,9 +39,34 @@ lwa.getAccessTokens = function getAccessTokens(code, client_id, client_secret,
   });
 };
 
+lwa.getAuthorizationCode = function getAuthorizationCode( code, client_id,
+  client_secret, redirect_uri) {
+  const params = {
+    response_type: 'response_code',
+    code,
+    client_id,
+    client_secret,
+    redirect_uri,
+  };
+  const options = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  };
+
+  return bhttp.post(OAUTH_URL, params, options).then(response => {
+    const body = response.body;
+    if (body.error) {
+      throw new lwa.error.LoginWithAmazonError(body.error,
+                                                body.error_description);
+    }
+    return body;
+  });
+};
+
  /**
   * @param string $accessToken Required
-  * @return object {data} or {key: data} depending on options provided
+  * @return object json body response
   */
 lwa.getProfile = function getProfile(access_token) {
   const url = 'https://api.amazon.com/user/profile?access_token=' +
@@ -63,7 +87,6 @@ lwa.getProfile = function getProfile(access_token) {
   */
 lwa.refreshAccessToken = function refreshAccessToken(refresh_token, client_id,
   client_secret) {
-  const url = 'https://api.amazon.com/auth/o2/token';
   const params = {
     grant_type: 'refresh_token',
     refresh_token,
@@ -75,7 +98,7 @@ lwa.refreshAccessToken = function refreshAccessToken(refresh_token, client_id,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   };
-  return bhttp.post(url, params, options).then((response) => {
+  return bhttp.post(OAUTH_URL, params, options).then((response) => {
     const body = response.body;
     if (body.error) {
       throw new lwa.error.LoginWithAmazonError(body.error,
