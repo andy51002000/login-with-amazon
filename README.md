@@ -16,6 +16,6 @@ Get the Authorization code
 
 Use the Authorization code to get the Acces tokens
 
-Use the Access tokens to get the Amazon profile
+Use the Access tokens to get the Amazon profile (successful response confirms validity of token)
 
 Refresh the Access token as needed (they expire every 5 minutes)
